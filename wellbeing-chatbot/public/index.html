@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Wellbeing Chatbot</title>
+<title>AURA CHATBOT</title>
 
 <style>
 body {
@@ -128,7 +128,7 @@ button:hover {
 <body>
 
 <div class="chat-container">
-  <div class="header">🌌 AI Wellbeing Chatbot</div>
+ <div class="header">🌌 AURA AI – Your Calm Companion 💙</div>
 
   <div class="chat-box" id="chatBox"></div>
 
@@ -148,6 +148,9 @@ async function sendMessage() {
   addMessage(message, "user");
   input.value = "";
 
+  // Show typing animation
+  const typingMsg = addMessage("Typing...", "bot");
+
   const res = await fetch("/chat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -156,9 +159,11 @@ async function sendMessage() {
 
   const data = await res.json();
 
-  addMessage(data.botReply + "\n💡 " + data.activity, "bot");
+  // Replace typing with real reply
+  typingMsg.innerText = data.reply;
 }
 
+// Add message
 function addMessage(text, type) {
   const chatBox = document.getElementById("chatBox");
   const msg = document.createElement("div");
@@ -166,8 +171,17 @@ function addMessage(text, type) {
   msg.innerText = text;
   chatBox.appendChild(msg);
   chatBox.scrollTop = chatBox.scrollHeight;
+  return msg;
 }
+
+// Enter key support
+document.getElementById("userInput").addEventListener("keypress", function(e) {
+  if (e.key === "Enter") {
+    sendMessage();
+  }
+});
 </script>
+
 
 </body>
 </html>
